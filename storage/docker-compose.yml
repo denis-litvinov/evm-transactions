@@ -1,0 +1,57 @@
+version: '3.8'
+services:
+
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - '6379:6379'
+    networks:
+      - evm-transactions-network
+
+  mysql:
+    container_name: mysql
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+    volumes:
+      - ./sql/mysql-init.sql:/docker-entrypoint-initdb.d/mysql-init.sql
+    ports:
+      - '3306:3306'
+    networks:
+      - evm-transactions-network
+
+  kafka:
+    image: 'bitnami/kafka:latest'
+    container_name: kafka
+    ports:
+      - '9092:9092'
+      - '9094:9094'
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093,EXTERNAL://:9094
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092,EXTERNAL://localhost:9094  # External Access
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,EXTERNAL:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+    networks:
+      - evm-transactions-network
+
+  schema-registry:
+    image: 'bitnami/schema-registry:latest'
+    container_name: schema-registry
+    ports:
+      - '8081:8081'
+    environment:
+      - SCHEMA_REGISTRY_KAFKA_BROKERS=PLAINTEXT://kafka:9092
+      - SCHEMA_REGISTRY_HOST_NAME=schema-registry
+      - SCHEMA_REGISTRY_LISTENERS=http://0.0.0.0:8081
+    depends_on:
+      - kafka
+    networks:
+      - evm-transactions-network
+
+networks:
+  evm-transactions-network:
+    driver: bridge

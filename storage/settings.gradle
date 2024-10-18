@@ -1,0 +1,7 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()  // For Gradle plugins
+        mavenCentral()        // To fetch dependencies
+    }
+}
+rootProject.name = 'storage'

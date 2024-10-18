@@ -1,0 +1,47 @@
+{
+  "namespace": "com.dlitv.storage",
+  "type": "record",
+  "name": "ArbitrumTransactionEvent",
+  "fields": [
+    {
+      "name": "hash",
+      "type": "string"
+    },
+    {
+      "name": "blockNumber",
+      "type": "long"
+    },
+    {
+      "name": "blockHash",
+      "type": "string"
+    },
+    {
+      "name": "fromAddress",
+      "type": "string"
+    },
+    {
+      "name": "toAddress",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "gasPrice",
+      "type": "string"
+    },
+    {
+      "name": "nonce",
+      "type": "long"
+    },
+    {
+      "name": "transactionIndex",
+      "type": "long"
+    },
+    {
+      "name": "value",
+      "type": "string"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: storage
+
+  datasource:
+    url: jdbc:mysql://${DB_URL:localhost}:3306/blockchain_transaction
+    username: root
+    password: admin
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  kafka:
+    bootstrap-servers: ${BOOTSTRAP_SERVERS_URL:localhost:9094}
+    client-id: student-service
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+      properties:
+        schema.registry.url: http://${SCHEMA_REGISTRY_URL:localhost}:8081
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      group-id: arbitrum-transaction-group
+      auto-offset-reset: earliest
+      properties:
+        schema.registry.url: http://${SCHEMA_REGISTRY_URL:localhost}:8081
+        specific.avro.reader: true
+        batch-size: 250
+      enable-auto-commit: false
+    listener:
+      ack-mode: manual
+
+websocket:
+  url: wss://arbitrum-mainnet.infura.io/ws/v3/${API_KEY}

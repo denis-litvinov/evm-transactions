@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: storage
+
+  datasource:
+    url: jdbc:mysql://${DB_URL:localhost}:3306/blockchain_transaction
+    username: root
+    password: admin
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+
+server:
+  port: 8085
