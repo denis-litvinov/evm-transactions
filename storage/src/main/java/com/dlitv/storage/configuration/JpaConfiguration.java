@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @EnableJpaRepositories(value = "com.dlitv.storage.repository")
-@EntityScan(value = "com.dlitv.evm.entity")
+@EntityScan(value = "com.dlitv.storage.entity")
 public class JpaConfiguration {
 }
