@@ -15,6 +15,10 @@ The EVM Transactions project is a multi-module application that includes two ser
 - **Batch Processing**: Gathers transactions in batches of 250 and persists them to the database for efficient processing.
 - **Message Queue Integration**: Uses Kafka to send and receive transaction data, allowing for scalability and reliability.
 
+### Search service
+- Provides RESTful endpoints to search transactions in the database.
+- Allows filtering by transaction hash, sender address, recipient address, and block number.
+
 
 ---
 ## Getting started
