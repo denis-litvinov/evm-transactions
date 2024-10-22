@@ -42,6 +42,21 @@ spring:
       enable-auto-commit: false
     listener:
       ack-mode: manual
+    topic:
+      name: arbitrum-transaction-event
 
 websocket:
   url: wss://arbitrum-mainnet.infura.io/ws/v3/${API_KEY}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+  endpoint:
+    prometheus:
+      enabled: true

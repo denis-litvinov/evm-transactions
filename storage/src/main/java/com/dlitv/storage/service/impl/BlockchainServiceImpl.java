@@ -5,6 +5,7 @@ import com.dlitv.storage.service.BlockchainService;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.web3j.protocol.Web3j;
@@ -25,6 +26,9 @@ public class BlockchainServiceImpl implements BlockchainService {
     private final RedisBlockStateServiceImpl redisBlockStateServiceImpl;
 
     private final KafkaTemplate<String, ArbitrumTransactionEvent> kafkaTemplate;
+
+    @Value("${spring.kafka.topic.name}")
+    private String kafkaTopicName;
 
     private volatile boolean isShuttingDown = false;
 
@@ -50,7 +54,7 @@ public class BlockchainServiceImpl implements BlockchainService {
                 );
     }
 
-    private void processBlock(EthBlock.Block ethBlock) {
+    public void processBlock(EthBlock.Block ethBlock) {
         web3j.ethGetBlockByHash(ethBlock.getHash(), true).sendAsync().thenAccept(fullBlockResponse -> {
             EthBlock.Block fullBlock = fullBlockResponse.getBlock();
 
@@ -62,8 +66,7 @@ public class BlockchainServiceImpl implements BlockchainService {
 
                 log.info("Sending to kafka broker transaction: {}", transaction.getHash());
 
-                // TODO: topic name should be extracted into application.properties
-                this.kafkaTemplate.send("arbitrum-transaction-event", arbitrumTransactionEvent);
+                this.kafkaTemplate.send(kafkaTopicName, arbitrumTransactionEvent);
             });
 
             redisBlockStateServiceImpl.saveLastProcessedBlock(fullBlock.getNumber());

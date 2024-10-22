@@ -52,6 +52,17 @@ services:
     networks:
       - evm-transactions-network
 
+  prometheus:
+    image: 'bitnami/prometheus:latest'
+    container_name: prometheus
+    volumes:
+      - ./storage/prometheus/prometheus.yml:/opt/bitnami/prometheus/conf/prometheus.yml
+    ports:
+      - '9090:9090'
+    networks:
+      - evm-transactions-network
+
+
 networks:
   evm-transactions-network:
     driver: bridge
