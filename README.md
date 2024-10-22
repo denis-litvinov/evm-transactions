@@ -14,6 +14,7 @@ The EVM Transactions project is a multi-module application that includes two ser
 - **Data Consistency**: Tracks the last processed block using Redis. If the service crashes, it resumes from the last saved block to ensure all data is consistent.
 - **Batch Processing**: Gathers transactions in batches of 250 and persists them to the database for efficient processing.
 - **Message Queue Integration**: Uses Kafka to send and receive transaction data, allowing for scalability and reliability.
+- **Prometheus Monitoring**: Integrated Prometheus to monitor application metrics, including a custom metric that tracks the count of Kafka events sent. Prometheus runs on port 9090.
 
 ### Search service
 - Provides RESTful endpoints to search transactions in the database.
